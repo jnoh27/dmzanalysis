@@ -1,7 +1,10 @@
+from pydoc import plain
+
 import pandas as pd
+from scipy import stats
 from scipy.stats import pearsonr
 from scipy.stats import kruskal
-from scipy import stats
+from scipy.stats import mannwhitneyu
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -60,7 +63,48 @@ plt.grid(True)
 #plt.show()
 
 
+sicyos_angulatus_category = graph_df.sort_values(by=['분류'])
+forestlist = sicyos_angulatus_category['가시박 함량'].tolist()[:20]
+plainlist = sicyos_angulatus_category['가시박 함량'].tolist()[20:29]
+riverlist = sicyos_angulatus_category['가시박 함량'].tolist()[29:]
 
-# forest_shapiro_test = stats.shapiro(forestlist)
+#print(forestlist)
+#print(plainlist)
+#print(riverlist)
 
+forest_shapiro_test = stats.shapiro(forestlist)
+plain_shapiro_test = stats.shapiro(plainlist)
+river_shapiro_test = stats.shapiro(riverlist)
 
+#print(forest_shapiro_test)
+#print(plain_shapiro_test)
+#print(river_shapiro_test)
+
+correlation_coefficient, p_value = kruskal(forestlist, riverlist, plainlist)
+# print(correlation_coefficient, p_value)
+
+forest_river_mw = mannwhitneyu(forestlist, riverlist)
+forest_plain_mw = mannwhitneyu(forestlist, plainlist)
+river_plain_mw = mannwhitneyu(riverlist, plainlist)
+
+bcalpha = 0.05/3
+
+print(forest_river_mw)
+print(forest_plain_mw)
+print(river_plain_mw)
+
+'''
+print(bcalpha)
+if(bcalpha > forest_river_mw[1]):
+    print(True)
+else:
+    print(False)
+if(bcalpha > forest_plain_mw[1]):
+    print(True)
+else:
+    print(False)
+if(bcalpha > river_plain_mw[1]):
+    print(True)
+else:
+    print(False)
+'''
