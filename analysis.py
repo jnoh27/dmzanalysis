@@ -1,6 +1,7 @@
 from pydoc import plain
 
 import pandas as pd
+from pandas.plotting import table
 from scipy import stats
 from scipy.stats import pearsonr
 from scipy.stats import kruskal
@@ -26,7 +27,6 @@ plt.title('Regression Between Burcucumber Percentage and Shannon Diversity Index
 plt.grid(True)
 # plt.show()
 
-
 '''
 Relation between location and shanon diversity index
 '''
@@ -43,8 +43,18 @@ temlist = graph_df['가시박%'].tolist()
 forestlist = temlist[:3]
 riverlist = temlist[3:6]
 plainlist = temlist[6:]
-correlation_coefficient, p_value = kruskal(forestlist, riverlist, plainlist)
-#print(correlation_coefficient, p_value)
+
+# print(stats.shapiro(forestlist))
+# print(stats.shapiro(riverlist))
+# print(stats.shapiro(plainlist))
+
+anova_result = stats.f_oneway(
+    graph_df[graph_df['장소'] == 'Forest Edge']["H'"],
+    graph_df[graph_df['장소'] == 'Riverside']["H'"],
+    graph_df[graph_df['장소'] == 'Plain']["H'"]
+)
+
+# print(anova_result)
 
 '''
 Relation between location category and sicyos angulatus percentage
@@ -89,9 +99,9 @@ river_plain_mw = mannwhitneyu(riverlist, plainlist)
 
 bcalpha = 0.05/3
 
-print(forest_river_mw)
-print(forest_plain_mw)
-print(river_plain_mw)
+#print(forest_river_mw)
+#print(forest_plain_mw)
+#print(river_plain_mw)
 
 '''
 print(bcalpha)
